@@ -1,4 +1,6 @@
-# Tor relay from source with ARM (Anonymizing Relay Monitor)
+#!/bin/bash
+
+# Tor relay entrypoint
 # Copyright (C) 2017-2018 Rodrigo Martínez <dev@brunneis.com>
 # Copyright (C) 2021-2021 Connor Holloway <root_pfad@protonmail.com>
 #
@@ -13,17 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM brunneis/tor-relay:x86-64
-MAINTAINER "Rodrigo Martínez" <dev@brunneis.com>
+CONF_FILE=/home/tor/torrc
 
-################################################
-# TOR RELAY WITH ARM
-################################################
+if [ "$(whoami)" == "root" ]; then
+  # Fix if the container is launched with the root (host) user
+  if [ $HOST_UID -eq 0 ]; then
+    HOST_UID=1000
+  fi
 
-ENV TERM=xterm
-RUN \
-  apt-get update \
-  && apt-get -y upgrade \
-  && apt-get -y install \
-     tor-arm \
-  && apt-get clean
+  adduser -s /bin/bash -u $HOST_UID tor 2> /dev/null
+
+  if [ $? -eq 0 ]; then
+    chown -R tor:tor "$CONF_FILE"
+    chown -R tor:tor /home/tor
+  fi
+
+  su -c "/entrypoint.sh $1" - tor
+  exit
+fi
+
+cat $CONF_FILE || { echo "No torrc found, please attach the file using a docker volume"; exit 1; }
+
+exec /usr/local/bin/tor -f ~/torrc

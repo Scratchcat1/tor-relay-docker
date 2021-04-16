@@ -1,4 +1,6 @@
-# Tor relay from source with ARM (Anonymizing Relay Monitor)
+#!/bin/bash
+
+# Tor build script
 # Copyright (C) 2017-2018 Rodrigo Martínez <dev@brunneis.com>
 # Copyright (C) 2021-2021 Connor Holloway <root_pfad@protonmail.com>
 #
@@ -13,17 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM brunneis/tor-relay:x86-64
-MAINTAINER "Rodrigo Martínez" <dev@brunneis.com>
+set -e
 
-################################################
-# TOR RELAY WITH ARM
-################################################
+COUNT_CORES=`grep -c ^processor /proc/cpuinfo`
+echo "Will use $COUNT_CORES parallel jobs to build Tor"
 
-ENV TERM=xterm
-RUN \
-  apt-get update \
-  && apt-get -y upgrade \
-  && apt-get -y install \
-     tor-arm \
-  && apt-get clean
+mkdir /artifacts
+wget $TOR_TARBALL_LINK
+wget $TOR_TARBALL_LINK.asc
+gpg --keyserver pool.sks-keyservers.net --recv-keys $TOR_GPG_KEY
+gpg --verify $TOR_TARBALL_NAME.asc
+tar xvf $TOR_TARBALL_NAME
+cd tor-$TOR_VERSION
+./configure \
+    --build=$(uname -m)-alpine-linux-musl \
+    --host=$(uname -m)-alpine-linux-musl \
+    --target=$(uname -m)-alpine-linux-musl
+make -j$COUNT_CORES
+make install DESTDIR=/artifacts
+cd ..
+rm -r tor-$TOR_VERSION
+rm $TOR_TARBALL_NAME
+rm $TOR_TARBALL_NAME.asc

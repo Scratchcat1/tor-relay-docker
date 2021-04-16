@@ -2,6 +2,7 @@
 
 # Tor relay updater
 # Copyright (C) 2017-2018 Rodrigo Martínez <dev@brunneis.com>
+# Copyright (C) 2021-2021 Connor Holloway <root_pfad@protonmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +21,10 @@
 # arg1 - Docker image
 # arg2 - Tor relay type (bridge, middle or exit)
 ################################################################################
+
+echo "Not yet working"
+exit 1;
+
 
 # Kill the running container
 docker rm -f tor-$2-relay
