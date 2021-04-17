@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Tor relay image pusher
+# Tor relay image builder
 # Copyright (C) 2018 Rodrigo Martínez <dev@brunneis.com>
 # Copyright (C) 2021-2021 Connor Holloway <root_pfad@protonmail.com>
 #
@@ -16,22 +16,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ################################################################################
-# Usage example: ./push-arch-images.sh armhf arm64
+# Usage example: ./build-image.sh 0.4.5.7
 #
-# args - Architectures
+# tor version - Must be availible on https://dist.torproject.org/
 ################################################################################
 
-echo "Not yet working"
-exit 1;
+CURRENT_DIR=$(pwd)
 
-ARCHS=($@)
-VARIANTS=(tor-relay tor-relay-arm)
+help () {
+  printf "
+Usage example: ./build-image.sh 0.4.5.7
 
-for arch in ${ARCHS[@]}
+tor version - Must be availible on https://dist.torproject.org/ (0.4.5.7, 0.4.5.7-alpha)
+";
+}
+
+if (( $# != 1 )); then
+    >&2 echo "Illegal number of parameters";
+    help;
+    exit 1;
+fi
+TOR_VERSION="$1"
+VARIANTS=(tor-relay ) # tor-relay-arm)
+
+for variant in ${VARIANTS[@]}
   do
-    for variant in ${VARIANTS[@]}
-      do
-        docker push brunneis/$variant:$arch
-        docker push brunneis/$variant:$TOR_VERSION\_$arch
-      done
+    cd $CURRENT_DIR/$variant
+    docker buildx build --load --tag scratchcat1/$variant:$TOR_VERSION ./
   done

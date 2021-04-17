@@ -49,7 +49,7 @@ OR_PORT_DOCKER=${3:-9001}
 DIR_PORT=${4:-9030}
 HOST_UID=${5-"$UID"}
 
-docker run -id \
+docker run -i \
 -p $OR_PORT_DOCKER:$OR_PORT_DOCKER \
 -p $DIR_PORT:$DIR_PORT \
 -e "HOST_UID=$HOST_UID" \

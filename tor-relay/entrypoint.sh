@@ -17,13 +17,15 @@
 
 CONF_FILE=/home/tor/torrc
 
-if [ "$(whoami)" == "root" ]; then
+if [ $UID -eq 0 ]; then
   # Fix if the container is launched with the root (host) user
   if [ $HOST_UID -eq 0 ]; then
-    HOST_UID=1000
+    echo "HOST_UID not set or 0, defaulting to 1000";
+    HOST_UID=1000;
   fi
 
-  adduser -s /bin/bash -u $HOST_UID tor 2> /dev/null
+  echo "Creating the tor user with uid: $HOSTUID";
+  adduser --disabled-password -s /bin/bash -u $HOST_UID tor 2> /dev/null
 
   if [ $? -eq 0 ]; then
     chown -R tor:tor "$CONF_FILE"
@@ -35,5 +37,5 @@ if [ "$(whoami)" == "root" ]; then
 fi
 
 cat $CONF_FILE || { echo "No torrc found, please attach the file using a docker volume"; exit 1; }
-
-exec /usr/local/bin/tor -f ~/torrc
+echo "Running as uid: $UID with home: $HOME";
+exec /usr/local/bin/tor -f "$CONF_FILE"
