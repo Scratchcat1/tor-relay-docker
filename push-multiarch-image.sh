@@ -44,7 +44,7 @@ TOR_VERSION="$1"
 for variant in ${VARIANTS[@]}
   do
     cd $CURRENT_DIR/$variant
-    docker buildx build --platform $PLATFORMS --push --tag scratchcat1/$variant:$TOR_VERSION ./
+    docker buildx build --platform $PLATFORMS --build-arg TOR_VERSION=$TOR_VERSION  --push --tag scratchcat1/$variant:$TOR_VERSION ./
     # docker tag scratchcat1/$variant:$arch \
     #     scratchcat1/$variant:$TOR_VERSION\_$arch
   done

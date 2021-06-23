@@ -41,3 +41,7 @@ The `build-image.sh` script will build the Docker image for the current architec
 The `push-multiarch-image.sh` will build and push the cross platform Docker image for the platforms defined in `env.sh`. Only pushing is supported for the multiarch image because docker doesn't yet support the loading of manifest lists.
 You will need to set up a cross platform build environment with this [guide](https://web.archive.org/web/20201230140648/https://jite.eu/2019/10/3/multi-arch-docker/)
 
+## Common problems
+### 32bit Alpine Images have incorrect time on Raspbian
+Due to a [https://wiki.alpinelinux.org/wiki/Release_Notes_for_Alpine_3.13.0#musl_1.2](change) you will need [https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/](upgrade libseccomp2 and docker), I use:  
+```sudo apt install libseccomp2 -t unstable```

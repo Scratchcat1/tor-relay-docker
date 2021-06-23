@@ -13,14 +13,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM alpine:latest as builder
+FROM alpine:3.12.0 as builder
 LABEL maintainer "Connor Holloway" <root_pfad@protonmail.com>
 
 ################################################
 # TOR RELAY
 ################################################
 
-ENV TOR_VERSION 0.4.5.7
+ARG TOR_VERSION=0.4.5.7
+
 ENV TOR_TARBALL_NAME tor-$TOR_VERSION.tar.gz
 ENV TOR_TARBALL_LINK https://dist.torproject.org/$TOR_TARBALL_NAME
 ENV TOR_TARBALL_ASC $TOR_TARBALL_NAME.asc
@@ -57,13 +58,14 @@ RUN bash build-tor.sh
 #     musl-dev \
 #     zlib-dev
 
-FROM alpine:latest
+FROM alpine:3.12.0
 LABEL maintainer "Connor Holloway" <root_pfad@protonmail.com>
 
 RUN apk --no-cache add \
   libevent \
   libressl \
-  bash
+  bash \
+  libgcc
 
 COPY --from=builder /artifacts/ /
 # RUN ls -lhaR /usr && exit 1
