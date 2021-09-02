@@ -39,7 +39,7 @@ When launching a Tor relay with the `launch.sh` script, you can update the Tor s
 ## How to build the images
 The `build-image.sh` script will build the Docker image for the current architecture.  
 The `push-multiarch-image.sh` will build and push the cross platform Docker image for the platforms defined in `env.sh`. Only pushing is supported for the multiarch image because docker doesn't yet support the loading of manifest lists.
-You will need to set up a cross platform build environment with this [guide](https://web.archive.org/web/20201230140648/https://jite.eu/2019/10/3/multi-arch-docker/)
+You will need to set up a cross platform build environment with this [guide](https://web.archive.org/web/20201230140648/https://jite.eu/2019/10/3/multi-arch-docker/) (use `a7996909642ee92942dcd6cff44b9b95f08dad64` as the binfmt tag to fix armv7 bash install errors).
 
 ## Common problems
 ### 32bit Alpine Images have incorrect time on Raspbian

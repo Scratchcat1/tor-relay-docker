@@ -42,5 +42,5 @@ VARIANTS=(tor-relay ) # tor-relay-arm)
 for variant in ${VARIANTS[@]}
   do
     cd $CURRENT_DIR/$variant
-    docker buildx build --load --tag scratchcat1/$variant:$TOR_VERSION ./
+    docker buildx build --load --build-arg TOR_VERSION=$TOR_VERSION --tag scratchcat1/$variant:$TOR_VERSION ./
   done

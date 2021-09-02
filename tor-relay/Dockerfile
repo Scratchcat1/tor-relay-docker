@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM alpine:3.12.0 as builder
+FROM alpine:3.13.6 as builder
 LABEL maintainer "Connor Holloway" <root_pfad@protonmail.com>
 
 ################################################
@@ -58,7 +58,7 @@ RUN bash build-tor.sh
 #     musl-dev \
 #     zlib-dev
 
-FROM alpine:3.12.0
+FROM alpine:3.13.6
 LABEL maintainer "Connor Holloway" <root_pfad@protonmail.com>
 
 RUN apk --no-cache add \

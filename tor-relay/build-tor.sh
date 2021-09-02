@@ -23,8 +23,11 @@ echo "Will use $COUNT_CORES parallel jobs to build Tor"
 mkdir /artifacts
 wget $TOR_TARBALL_LINK
 wget $TOR_TARBALL_LINK.asc
+echo $(sha256sum $TOR_TARBALL_NAME)
+echo $(sha256sum $TOR_TARBALL_NAME.asc)
 gpg --keyserver keyserver.ubuntu.com --recv-keys $TOR_GPG_KEY
-gpg --verify $TOR_TARBALL_NAME.asc
+gpg --output ./tor.keyring --export $TOR_GPG_KEY
+gpgv --keyring ./tor.keyring $TOR_TARBALL_NAME.asc $TOR_TARBALL_NAME
 tar xvf $TOR_TARBALL_NAME
 cd tor-$TOR_VERSION
 ./configure \
