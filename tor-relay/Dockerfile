@@ -13,33 +13,45 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM alpine:3.13.6 as builder
-LABEL maintainer "Connor Holloway" <root_pfad@protonmail.com>
+FROM alpine:3.15.4 as builder
+LABEL maintainer="Connor Holloway <root_pfad@protonmail.com>"
 
 ################################################
 # TOR RELAY
 ################################################
 
-ARG TOR_VERSION=0.4.5.7
+ARG TOR_VERSION=0.4.7.7
 
 ENV TOR_TARBALL_NAME tor-$TOR_VERSION.tar.gz
 ENV TOR_TARBALL_LINK https://dist.torproject.org/$TOR_TARBALL_NAME
-ENV TOR_TARBALL_ASC $TOR_TARBALL_NAME.asc
-ENV TOR_GPG_KEY 0x6AFEE6D49E92B601
+# Keys from: https://support.torproject.org/little-t-tor/verify-little-t-tor/
+ENV TOR_GPG_KEY "0x514102454D0A87DB0767A1EBBE6A0531C18A9179 0xB74417EDDF22AC9F9E90F49142E86A2A11F48D36 0x2133BC600AB133E1D826D173FE43009C4607B1FB"
 
 RUN \
   apk --no-cache add \
-    wget \
-    make \
-    gcc \
-    libevent-dev \
-    libressl-dev \
-    gnupg \
-    tar \
-    musl-dev \
-    zlib-dev \
-    bash \
-    libressl
+  wget \
+  make \
+  gcc \
+  libevent-dev \
+  libressl-dev \
+  gnupg \
+  tar \
+  musl-dev \
+  zlib-dev \
+  bash \
+  libressl
+
+RUN gpg --keyserver keyserver.ubuntu.com --recv-keys $TOR_GPG_KEY
+RUN gpg --output ./tor.keyring --export $TOR_GPG_KEY
+
+RUN mkdir /artifacts
+RUN wget $TOR_TARBALL_LINK -O ${TOR_TARBALL_NAME}
+# Older packages just have an asc file, newer ones have sha256sum + sha256sum.asc files
+RUN wget $TOR_TARBALL_LINK.asc || (wget $TOR_TARBALL_LINK.sha256sum && wget $TOR_TARBALL_LINK.sha256sum.asc)
+
+ADD verify-source.sh verify-source.sh
+RUN chmod +rx verify-source.sh
+RUN bash verify-source.sh
 
 ADD build-tor.sh build-tor.sh
 RUN chmod +rx build-tor.sh
@@ -58,7 +70,7 @@ RUN bash build-tor.sh
 #     musl-dev \
 #     zlib-dev
 
-FROM alpine:3.13.6
+FROM alpine:3.15.4
 LABEL maintainer "Connor Holloway" <root_pfad@protonmail.com>
 
 RUN apk --no-cache add \
