@@ -1,6 +1,6 @@
 # Tor relay from source with ARM (Anonymizing Relay Monitor)
 # Copyright (C) 2017-2018 Rodrigo Martínez <dev@brunneis.com>
-# Copyright (C) 2021-2021 Connor Holloway <root_pfad@protonmail.com>
+# Copyright (C) 2021-2022 Connor Holloway <root_pfad@protonmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@ MAINTAINER "Rodrigo Martínez" <dev@brunneis.com>
 
 ENV TERM=xterm
 RUN \
-  apt-get update \
-  && apt-get -y upgrade \
-  && apt-get -y install \
-     tor-arm \
-  && apt-get clean
+   apt-get update \
+   && apt-get -y upgrade \
+   && apt-get -y install \
+   tor-arm \
+   && apt-get clean

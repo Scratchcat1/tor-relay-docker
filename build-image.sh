@@ -2,7 +2,7 @@
 
 # Tor relay image builder
 # Copyright (C) 2018 Rodrigo Martínez <dev@brunneis.com>
-# Copyright (C) 2021-2021 Connor Holloway <root_pfad@protonmail.com>
+# Copyright (C) 2021-2022 Connor Holloway <root_pfad@protonmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

@@ -14,7 +14,7 @@ Fork from [https://github.com/brunneis/tor-relay-docker](https://github.com/brun
 
 __Tor__ (Tor built from source)
 - [scratchcat1/tor-relay:latest](https://hub.docker.com/r/scratchcat1/tor-relay/tags/) (latest stable)
-- [scratchcat1/tor-relay:0.4.5.7](https://hub.docker.com/r/scratchcat1/tor-relay/tags/)
+- [scratchcat1/tor-relay:0.4.7.7](https://hub.docker.com/r/scratchcat1/tor-relay/tags/)
 
 ## Features
 - *Lightweight*: 13MB compressed

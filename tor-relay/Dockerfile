@@ -71,7 +71,7 @@ RUN bash build-tor.sh
 #     zlib-dev
 
 FROM alpine:3.15.4
-LABEL maintainer "Connor Holloway" <root_pfad@protonmail.com>
+LABEL maintainer="Connor Holloway <root_pfad@protonmail.com>"
 
 RUN apk --no-cache add \
   libevent \
